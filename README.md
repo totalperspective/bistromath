@@ -1,6 +1,6 @@
 # Bistromath
 
-Bistromath is a transformative JavaScript/TypeScript library designed to simplify the mapping and transformation of data objects. Inspired by the ingenious Clojure library Meander and the expressive power of the EDN Query Language (EQL), Bistromath aims to reduce the intricacies involved in data object transformation and integration, employing a syntax that extends ES6 destructuring through EQL-like queries.
+Bistromath is a "transformative" JavaScript/TypeScript library designed to simplify the mapping and transformation (told you) of data objects. Inspired by the ingenious Clojure library Meander and the expressive power of the EDN Query Language (EQL), Bistromath aims to reduce the intricacies involved in data object transformation and integration, employing a syntax that extends ES6 destructuring through EQL-like queries.
 
 ## Why Bistromath?
 
