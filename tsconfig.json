@@ -16,7 +16,7 @@
   },
   "include": [
     "src",
-    "types/ast.d.ts",
-    "types/dsl.d.ts"
+    "types/ast.ts",
+    "types/dsl.ts"
   ]
 }

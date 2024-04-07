@@ -1,10 +1,12 @@
 export type Mapping<SourceT, TargetT> =
   | {
-      [Property in keyof TargetT]: keyof SourceT | '*'
-      // | MappingOperation<SourceT, TargetT[Property]>
-      // | OperationList<SourceT, TargetT[Property]>
+      [Property in keyof TargetT]:
+        | keyof SourceT
+        | MappingOperation<SourceT, TargetT[Property]>
+        | OperationList<SourceT, TargetT[Property]>
     }
   | OperationList<SourceT, TargetT>
+  | MappingOperation<SourceT, TargetT>
 
 export type OperationList<SourceT, TargetT> = (
   | (keyof SourceT & string)
@@ -30,10 +32,14 @@ export type MappingOperation<SourceT, ResultT> =
   | IntersectOperation<SourceT>
   | GroupOperation<SourceT>
 
-export type DirectCopy<SourceT> = DottedPath<Array<keyof SourceT & string>>
+export type DirectCopy<SourceT> = DottedPath<Array<keyof SourceT & string>> | '*' | string
+
+export type Pattern<SourceT> = {
+  [Property in keyof SourceT]: SourceT[Property]
+}
 
 export type FilterOperation<SourceT> = {
-  $filter: (item: SourceT) => boolean
+  $filter: Record<string, string>
 }
 
 export type ProjectOperation<SourceT> = {
