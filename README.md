@@ -67,7 +67,7 @@ Result:
 - Efficiency: Reduce boilerplate and integrate various data sources seamlessly.
 - Typescript ready: something cool about TS
 
---
+---
 
 Bootstrapped with: [create-ts-lib-gh](https://github.com/glebbash/create-ts-lib-gh)
 
