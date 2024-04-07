@@ -1,16 +1,17 @@
-type Mapping<SourceT, TargetT> = {
-  [Property in keyof TargetT]:
-    | keyof SourceT
-    | MappingOperation<SourceT, TargetT[Property]>
-    | OperationList<SourceT, TargetT[Property]>
-}
+export type Mapping<SourceT, TargetT> =
+  | {
+      [Property in keyof TargetT]: keyof SourceT | '*'
+      // | MappingOperation<SourceT, TargetT[Property]>
+      // | OperationList<SourceT, TargetT[Property]>
+    }
+  | OperationList<SourceT, TargetT>
 
-type OperationList<SourceT, TargetT> = (
+export type OperationList<SourceT, TargetT> = (
   | (keyof SourceT & string)
   | MappingOperation<SourceT, TargetT>
 )[]
 
-type DottedPath<T extends string[]> = T extends [infer F, ...infer R]
+export type DottedPath<T extends string[]> = T extends [infer F, ...infer R]
   ? F extends string
     ? R extends string[]
       ? `${F}${R['length'] extends 0 ? '' : '.'}${DottedPath<R>}`
@@ -18,7 +19,7 @@ type DottedPath<T extends string[]> = T extends [infer F, ...infer R]
     : never
   : ''
 
-type MappingOperation<SourceT, ResultT> =
+export type MappingOperation<SourceT, ResultT> =
   | DirectCopy<SourceT>
   | FilterOperation<SourceT>
   | ProjectOperation<SourceT>
@@ -29,42 +30,42 @@ type MappingOperation<SourceT, ResultT> =
   | IntersectOperation<SourceT>
   | GroupOperation<SourceT>
 
-type DirectCopy<SourceT> = DottedPath<Array<keyof SourceT & string>> | '*'
+export type DirectCopy<SourceT> = DottedPath<Array<keyof SourceT & string>>
 
-type FilterOperation<SourceT> = {
+export type FilterOperation<SourceT> = {
   $filter: (item: SourceT) => boolean
 }
 
-type ProjectOperation<SourceT> = {
+export type ProjectOperation<SourceT> = {
   $project: (keyof SourceT)[]
 }
 
-type RenameOperation<SourceT> = {
+export type RenameOperation<SourceT> = {
   $rename: { [key in keyof SourceT]: string }
 }
 
-type TemplateOperation<SourceT> = {
+export type TemplateOperation<SourceT> = {
   $template: string | ((ctx: SourceT) => string)
 }
 
-type UnionOperation<SourceT> = {
+export type UnionOperation<SourceT> = {
   $union: Mapping<SourceT, any>[]
 }
 
-type DifferenceOperation<SourceT> = {
+export type DifferenceOperation<SourceT> = {
   $difference: Mapping<SourceT, any>[]
 }
 
-type IntersectOperation<SourceT> = {
+export type IntersectOperation<SourceT> = {
   $intersect: Mapping<SourceT, any>[]
 }
 
-type GroupOperation<SourceT> = {
+export type GroupOperation<SourceT> = {
   $group: keyof SourceT
   $aggregate?: AggregateFunction<SourceT>
 }
 
-type AggregateFunction<SourceT> = {
+export type AggregateFunction<SourceT> = {
   $count?: boolean
   $sum?: keyof SourceT
   // Add more aggregate functions as needed
