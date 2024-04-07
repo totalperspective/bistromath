@@ -20,39 +20,41 @@ npm install @totalperspective/bistromath
 import { transmute } from '@totalperspective/bistromath'
 
 const source = {
-  "user": {
-    "name": "Jane Doe",
+  "traveller": {
+    "name": "Arthur Dent",
     "contacts": [
-      {"type": "email", "value": "jane@example.com"},
-      {"type": "phone", "value": "555-1234"}
+      {"type": "email", "value": "arthur@heartofgold.com"},
+      {"type": "phone", "value": "123-4567"}
     ],
-    "usage": [
-      {"date": "2023-01-01", "activity": "login"},
-      {"date": "2023-01-02", "activity": "post"}
+    "actions": [
+      {"date": "2022-12-31", "activity": "boarding"},
+      {"date": "2023-01-01", "activity": "panicking"},
+      {"date": "2023-01-02", "activity": "finding towel"}
     ],
     "preferences": {
-      "language": "English",
-      "theme": "Light"
+      "language": "Galactic Standard",
+      "theme": "Don't Panic"
     }
   }
 }
 
-const mapping = ["user", {
+const mapping = ["traveller", {
   "name": "*",
   "email": ["contacts", {"$filter": {"type": "email"}}, "value"],
-  "lastActivity": ["usage", {"$sort": "date", "$order": "desc"}, "date", {"$limit": 1}],
+  "latestAction": ["actions", {"$sort": "date", "$order": "desc"}, "date", {"$limit": 1}],
   "preferredTheme": "preferences.theme"
 }]
 
 const result = transmute(source, mapping);
 console.log(result); // Output: Transformed object
 ```
+Result:
 ```
 {
-  "name": "Jane Doe",
-  "email": "jane@example.com",
-  "lastActivity": "2023-01-02",
-  "preferredTheme": "Light"
+  "name": "Arthur Dent",
+  "email": "arthur@heartofgold.com",
+  "latestAction": "2023-01-02",
+  "preferredTheme": "Don't Panic"
 }
 ```
 ## Features
