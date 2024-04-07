@@ -128,3 +128,17 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+# Extra (to dedupe)
+node_modules
+.coverage
+.nyc_output
+.DS_Store
+*.log
+.vscode
+.idea
+lib
+compiled
+.awcache
+.rpt2_cache
+docs

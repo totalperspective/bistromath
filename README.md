@@ -1,5 +1,8 @@
 # Bistromath
 
+[![Deploy](https://github.com/totalperspective/bistromath/workflows/build/badge.svg)](https://github.com/totalperspective/bistromath/actions)
+[![Coverage Status](https://coveralls.io/repos/github/totalperspective/bistromath/badge.svg?branch=master)](https://coveralls.io/github/totalperspective/bistromath?branch=master)
+
 Bistromath is a "transformative" JavaScript/TypeScript library designed to simplify the mapping and transformation (told you) of data objects. Inspired by the ingenious Clojure library Meander and the expressive power of the EDN Query Language (EQL), Bistromath aims to reduce the intricacies involved in data object transformation and integration, employing a syntax that extends ES6 destructuring through EQL-like queries.
 
 ## Why Bistromath?
@@ -63,3 +66,7 @@ Result:
 - Advanced Queries: Leverage relational queries for complex data transformations.
 - Efficiency: Reduce boilerplate and integrate various data sources seamlessly.
 - Typescript ready: something cool about TS
+
+Bootstrapped with: [create-ts-lib-gh](https://github.com/glebbash/create-ts-lib-gh)
+
+This project is [MIT Licensed](LICENSE).
