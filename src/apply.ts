@@ -1,3 +1,6 @@
-import { Ast } from '../types/ast'
-// @ts-expect-error Until we implement it
-export default <SourceT, TargetT>(ast: Ast<SourceT, TargetT>, source: SourceT): TargetT => ({})
+import { ASTNode } from '../types/ast'
+
+export default <SourceT extends object, TargetT extends object>(
+  ast: ASTNode<SourceT, TargetT> | Record<string, never>,
+  source: SourceT
+): TargetT => ({} as TargetT)

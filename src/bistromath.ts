@@ -6,7 +6,7 @@ import { toAst } from './parse'
 
 export const add = (a: number, b: number) => a + b
 
-export function transmute<SourceT, TargetT>(
+export function transmute<SourceT extends object, TargetT extends object>(
   mapping: Mapping<SourceT, TargetT>,
   source: SourceT
 ): TargetT {
