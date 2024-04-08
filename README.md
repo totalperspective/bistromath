@@ -67,6 +67,13 @@ Result:
 - Efficiency: Reduce boilerplate and integrate various data sources seamlessly.
 - Typescript ready: something cool about TS
 
+## Todo
+```
+addMapping('Contacts', 'Contact<Type>', mapping1)
+addMapping('Traveller', 'Profile', mapping2)
+const transmuter = fromType('Tranveller', 'Profile')
+```
+
 Bootstrapped with: [create-ts-lib-gh](https://github.com/glebbash/create-ts-lib-gh)
 
 This project is [MIT Licensed](LICENSE).
