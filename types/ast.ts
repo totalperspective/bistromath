@@ -1,7 +1,7 @@
-import { AggregateFunction, DirectCopy, DottedPath, Pattern } from './dsl'
+import { AggregateFunction, DottedPath, Lookup, Mapping, Pattern } from './dsl'
 
 export enum NodeType {
-  DirectCopy = 'DirectCopy',
+  Lookup = 'Lookup',
   Filter = 'Filter',
   Project = 'Project',
   Rename = 'Rename',
@@ -17,14 +17,14 @@ export type NodeName = keyof typeof NodeType
 
 // Extend the ASTNode type to include OperationListNode
 export type ASTNode<SourceT, TargetT> =
-  | DirectCopyNode<SourceT, TargetT>
+  | LookupNode<SourceT, TargetT>
   | FilterNode<SourceT>
   | ProjectNode<SourceT>
-  | RenameNode<SourceT, TargetT>
+  | RenameNode<SourceT>
   | TemplateNode
-  | UnionNode<SourceT>
-  | DifferenceNode<SourceT>
-  | IntersectNode<SourceT>
+  | UnionNode<SourceT, TargetT>
+  | DifferenceNode<SourceT, TargetT>
+  | IntersectNode<SourceT, TargetT>
   | GroupNode<SourceT>
   | OperationListNode<SourceT, TargetT>
 
@@ -32,14 +32,16 @@ export interface OperationListNode<SourceT, TargetT> {
   type: NodeType.OperationList
   operations: ASTNode<SourceT, TargetT>[]
 }
-export interface DirectCopyNode<SourceT, TargetT> {
-  type: NodeType.DirectCopy
-  path: DirectCopy<SourceT>
+export interface LookupNode<SourceT, TargetT> {
+  type: NodeType.Lookup
+  path: Lookup<SourceT>
 }
 
 export interface FilterNode<SourceT> {
   type: NodeType.Filter
-  condition: Record<string, string>
+  condition: {
+    [P in keyof SourceT]?: SourceT[P]
+  }
 }
 
 export interface ProjectNode<SourceT> {
@@ -47,9 +49,9 @@ export interface ProjectNode<SourceT> {
   fields: Array<keyof SourceT & string>
 }
 
-export interface RenameNode<SourceT, TargetT> {
+export interface RenameNode<SourceT> {
   type: NodeType.Rename
-  mappings: { [P in keyof SourceT]?: ASTNode<SourceT, TargetT> }
+  mappings: { [P in keyof SourceT]?: string }
 }
 
 export interface TemplateNode {
@@ -57,19 +59,19 @@ export interface TemplateNode {
   template: string
 }
 
-export interface UnionNode<SourceT> {
+export interface UnionNode<SourceT, TargetT> {
   type: NodeType.Union
-  operands: ASTNode<SourceT, any>[]
+  operands: ASTNode<SourceT, TargetT>[]
 }
 
-export interface DifferenceNode<SourceT> {
+export interface DifferenceNode<SourceT, TargetT> {
   type: NodeType.Difference
-  operands: ASTNode<SourceT, any>[]
+  operands: ASTNode<SourceT, TargetT>[]
 }
 
-export interface IntersectNode<SourceT> {
+export interface IntersectNode<SourceT, TargetT> {
   type: NodeType.Intersect
-  operands: ASTNode<SourceT, any>[]
+  operands: ASTNode<SourceT, TargetT>[]
 }
 
 export interface GroupNode<SourceT> {
@@ -78,14 +80,14 @@ export interface GroupNode<SourceT> {
   aggregate?: AggregateFunction<SourceT>
 }
 
-export type NodeMap = {
-  [Node in NodeType]: Extract<ASTNode<object, object>, { type: Node }>
+export type NodeMap<S, T> = {
+  [Node in NodeType]: Extract<ASTNode<S, T>, { type: Node }>
 }
 
-export type NodeSpecMap = {
-  [Node in NodeType]: Omit<NodeMap[Node], 'type'>
+export type NodeSpecMap<S, T> = {
+  [Node in NodeType]: Omit<NodeMap<S, T>[Node], 'type'>
 }
 
 export type NodeConstructor = {
-  [Node in NodeType]: (spec: NodeSpecMap[Node]) => NodeMap[Node]
+  [Node in NodeType]: <S, T>(spec: NodeSpecMap<S, T>[Node]) => NodeMap<S, T>[Node]
 }

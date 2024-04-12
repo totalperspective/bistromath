@@ -2,11 +2,12 @@ import type { ASTNode, NodeConstructor, NodeMap, NodeName, NodeSpecMap } from '.
 import { NodeType } from '../types/ast'
 
 function factoryFactory<T extends NodeType>(type: T) {
-  return (spec: NodeSpecMap[T]): NodeMap[T] => ({ type, ...spec } as NodeMap[T])
+  return <SourceT, TargetT>(spec: NodeSpecMap<SourceT, TargetT>[T]): NodeMap<SourceT, TargetT>[T] =>
+    ({ type, ...spec } as NodeMap<SourceT, TargetT>[T])
 }
 
 const factory: NodeConstructor = {
-  DirectCopy: factoryFactory(NodeType.DirectCopy),
+  Lookup: factoryFactory(NodeType.Lookup),
   Filter: factoryFactory(NodeType.Filter),
   Difference: factoryFactory(NodeType.Difference),
   Group: factoryFactory(NodeType.Group),
@@ -19,11 +20,11 @@ const factory: NodeConstructor = {
 }
 
 export function b<
-  SourceT extends object,
-  TargetT extends object,
-  NodeNameT extends NodeName,
-  NodeTypeT extends (typeof NodeType)[NodeNameT]
->(type: NodeNameT, spec: NodeSpecMap[NodeTypeT]): ASTNode<SourceT, TargetT> {
+  SourceT,
+  TargetT,
+  NodeNameT extends NodeName = NodeName,
+  NodeTypeT extends (typeof NodeType)[NodeNameT] = (typeof NodeType)[NodeNameT]
+>(type: NodeNameT, spec: NodeSpecMap<SourceT, TargetT>[NodeTypeT]): ASTNode<SourceT, TargetT> {
   const nodeType = NodeType[type]
   const toNode = factory[nodeType]
   return toNode(spec)

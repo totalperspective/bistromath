@@ -1,15 +1,15 @@
 import _ from 'lodash'
 
 import type { ASTNode } from '../types/ast'
-import type { DirectCopy, Mapping, OperationList } from '../types/dsl'
+import type { Lookup, Mapping, OperationList } from '../types/dsl'
 import { b } from './ast'
 import { isFilter, isOperatorList } from './dsl'
 
 export function toAst<SourceT extends object, TargetT extends object>(
-  mapping: Mapping<SourceT, TargetT> | DirectCopy<SourceT>
+  mapping: Mapping<SourceT, TargetT> | Lookup<SourceT>
 ): ASTNode<SourceT, TargetT> {
   if (typeof mapping === 'string') {
-    return b('DirectCopy', { path: mapping })
+    return b('Lookup', { path: mapping })
   }
   if (isOperatorList<object, object>(mapping)) {
     const operations = []
